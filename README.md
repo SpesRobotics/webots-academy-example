@@ -11,7 +11,6 @@ Create a repository that contains:
 - a world file under `worlds/`
 - one or more controllers under `controllers/`
 - a root `README.md` that explains the lesson to students
-- a `webots.yaml` file that describes how the simulation should start
 
 You are expected to build your own simulation and your own controllers. This repository is only a reference layout.
 
