@@ -4,43 +4,6 @@ This repository is the demo `Visual Tracking` lesson used to show professors how
 
 ![Visual Tracking Preview](assets/preview.png)
 
-## Repository Layout
-
-```text
-.
-├── README.md
-├── webots.yaml
-├── worlds/
-│   └── visual_tracking.wbt
-├── controllers/
-│   ├── visual_tracker/
-│   │   └── visual_tracker.py
-│   └── ball_supervisor/
-│       └── ball_supervisor.py
-└── assets/
-    ├── add_new_lesson.png
-    ├── lesson_template.png
-    └── preview.png
-```
-
-## What Webots Academy Reads From Your Repo
-
-When a professor creates a lesson in Webots Academy and clicks `Sync GitHub`, the platform reads:
-
-- `README.md` from the repo root and stores it as the lesson theory content
-- `world_file` from the lesson record, which must point to the Webots `.wbt` file on GitHub
-- `editable_file_path` from the lesson record, which must point to the controller file students edit
-- `webots.yaml`, which Webots uses when launching the simulation environment
-
-For this example lesson, the values are:
-
-- `world_file`: `https://github.com/SpesRobotics/webots-academy-example/blob/main/worlds/visual_tracking.wbt`
-- `editable_file_path`: `controllers/visual_tracker/visual_tracker.py`
-
-Keep the walkthrough in this root `README.md`. Do not add a controller-local `README.md` if you want this file to remain the synced lesson content.
-
-The screenshots in this README are referenced with relative paths from `assets/`, so they will render on GitHub after this repository is pushed.
-
 ## Step 1: Create Your Own Simulation
 
 Create a repository that contains:
@@ -54,31 +17,7 @@ You are expected to build your own simulation and your own controllers. This rep
 
 If your lesson has support controllers such as supervisors, keep them in the repo as normal. Only the controller named by `editable_file_path` becomes the student-editable file in Webots Academy.
 
-## Step 2: Configure `webots.yaml`
-
-`webots.yaml` is part of the runnable lesson contract. In this example it looks like this:
-
-```yaml
-type: demo
-
-init: |
-  apt install -y \
-    python3-numpy \
-    python3-opencv
-
-animation:
-  worlds:
-    - file: worlds/visual_tracking.wbt
-      duration: 10
-```
-
-Use it to define:
-
-- `type`: the Webots lesson mode, such as `demo`
-- `init`: packages or setup commands needed before the simulation starts
-- `animation.worlds`: the world file that should be launched for previews and demos
-
-## Step 3: Push The Repo To GitHub
+## Step 2: Push The Repo To GitHub
 
 Webots Academy sync expects GitHub URLs. After your repo is pushed, identify:
 
@@ -97,7 +36,7 @@ The editable path should look like:
 controllers/<controller_name>/<controller_file>.py
 ```
 
-## Step 4: Create The Lesson In Webots Academy
+## Step 3: Create The Lesson In Webots Academy
 
 Use the `Content Library` view and the highlighted `Create New Lesson` action:
 
@@ -123,7 +62,7 @@ The lesson form should look like this when the required fields are filled:
 
 ![Lesson template fields in the Webots Academy UI](assets/lesson_template.png)
 
-## Step 5: Sync And Preview
+## Step 4: Sync And Preview
 
 After the lesson is created:
 
@@ -134,7 +73,7 @@ After the lesson is created:
 
 If you change the repo later, push the update to GitHub and click `Sync GitHub` again.
 
-## Step 6: Assign The Lesson To Students
+## Step 5: Assign The Lesson To Students
 
 After the lesson is synced:
 
