@@ -144,15 +144,3 @@ After the lesson is synced:
 4. Reorder it if needed to match your course progression
 
 Once assigned, the lesson appears in the student dashboard like any other Webots Academy lesson.
-
-## Official Lessons vs Custom Lessons
-
-Professors can create and sync their own custom lessons directly from the Webots Academy UI.
-
-Official lessons are different:
-
-- they are seeded by Webots Academy maintainers
-- they require a code change in `webots-classroom`
-- they are not created by professors through the UI
-
-For that maintainer flow, the seeded lesson metadata in `webots-classroom/backend/init_db.py` must reference the GitHub `world_file` and the `editable_file_path`.
