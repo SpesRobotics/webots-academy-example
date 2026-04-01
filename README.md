@@ -9,7 +9,7 @@ This repository is the demo `Visual Tracking` lesson used to show professors how
 ```text
 .
 ├── README.md
-├── webots.yaml
+├── webots.yaml              # optional
 ├── worlds/
 │   └── visual_tracking.wbt
 ├── controllers/
@@ -30,7 +30,7 @@ When a professor creates a lesson in Webots Academy and clicks `Sync GitHub`, th
 - `README.md` from the repo root and stores it as the lesson theory content
 - `world_file` from the lesson record, which must point to the Webots `.wbt` file on GitHub
 - `editable_file_path` from the lesson record, which must point to the controller file students edit
-- `webots.yaml`, which Webots uses when launching the simulation environment
+- `webots.yaml`, if present, which Webots uses to add lesson-specific dependencies before launching the simulation environment
 
 For this example lesson, the values are:
 
@@ -48,7 +48,7 @@ Create a repository that contains:
 - a world file under `worlds/`
 - one or more controllers under `controllers/`
 - a root `README.md` that explains the lesson to students
-- a `webots.yaml` file that describes how the simulation should start
+- optionally, a `webots.yaml` file if the lesson needs extra system packages or setup commands
 
 You are expected to build your own simulation and your own controllers. This repository is only a reference layout.
 
@@ -56,27 +56,53 @@ If your lesson has support controllers such as supervisors, keep them in the rep
 
 ## Step 2: Configure `webots.yaml`
 
-`webots.yaml` is part of the runnable lesson contract. In this example it looks like this:
+`webots.yaml` is optional.
+
+If your lesson runs in the default environment, you can omit it entirely. Add it only when the lesson needs extra packages or setup commands beyond the base runtime.
+
+If you do use it, put this file at the root of your lesson repository, next to `README.md`, `worlds/`, and `controllers/`.
+
+The current format is intentionally simple: define an `init` shell block with the packages or setup commands your lesson needs before Webots starts.
+
+In this example it looks like this:
 
 ```yaml
-type: demo
-
 init: |
   apt install -y \
     python3-numpy \
     python3-opencv
-
-animation:
-  worlds:
-    - file: worlds/visual_tracking.wbt
-      duration: 10
 ```
 
-Use it to define:
+How to define it:
 
-- `type`: the Webots lesson mode, such as `demo`
-- `init`: packages or setup commands needed before the simulation starts
-- `animation.worlds`: the world file that should be launched for previews and demos
+- Use exactly one top-level key: `init`
+- Write normal shell commands inside the block
+- Prefer system packages installed with `apt install -y ...`
+- Keep the commands focused on lesson dependencies
+- Do not use the old `type` or `animation` fields anymore
+
+What Webots Academy does with it:
+
+- It builds a lesson-specific Docker image for the repository
+- It runs your `init` block during that image build
+- It then launches the lesson inside that prepared environment
+
+What is already included by default:
+
+- lessons start from the Cyberbotics Webots cloud image for the world's Webots version
+- for this example world (`R2025a`), the base image already includes `python3`, `gcc`, `g++`, and `make`
+- for this same base image, `python3-pip`, `python3-numpy`, `python3-opencv`, `python3-matplotlib`, `python3-scipy`, `git`, and `cmake` are not included by default
+
+This means you usually do not need `webots.yaml` for a pure Python standard-library controller, but you do need it as soon as your lesson depends on packages such as NumPy or OpenCV.
+
+For this lesson, the example dependencies match the controller implementation:
+
+- `python3-numpy` for image array handling
+- `python3-opencv` for color conversion, masking, and contour detection
+
+If your controller imports a package that is not present in the default environment, add it here. For example, if your lesson uses `numpy`, `opencv`, `scipy`, or another Ubuntu package, list it in the `init` block.
+
+A good rule is: if a student opens the lesson on a clean Webots Academy deployment, the simulation should still run because everything it needs is defined in `webots.yaml`.
 
 ## Step 3: Push The Repo To GitHub
 
